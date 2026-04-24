@@ -31,8 +31,27 @@ def cambio_greedy(monto: int, monedas: list) -> tuple | None:
         restante = restante % moneda   (lo que sobra)
     """
     # TODO: 1. Ordena las monedas de mayor a menor.
+    monedas.sort(reverse = True)
     # TODO: 2. Para cada denominación, toma tantas monedas como quepan.
+    usedList = []
+    restante = monto
+    cantidadTotal = 0
+    cantidad = 0
+    
+    for denom in monedas:
+        cantidad = restante // denom
+        if cantidad > 0:
+            cantidadTotal += cantidad
+            restante = restante % denom
+            usedList.append(denom)
+            
+    
     # TODO: 3. Si el residuo final es 0, retorna (lista_de_monedas_usadas, total).
+    if restante == 0:
+        return (usedList, cantidadTotal)
+    else:
+        return None
+    
     # TODO: 4. Si queda residuo, retorna None.
     pass
 
@@ -57,7 +76,17 @@ def cambio_optimo_dp(monto: int, monedas: list) -> tuple | None:
         Guarda padre[i] = m que produjo dp[i] para reconstruir la solución.
     """
     # TODO: crea la tabla dp y la tabla padre con longitud monto + 1.
+    dp = []
+    padre = []
+    
     # TODO: llena la tabla recorriendo cada monto parcial de 1 a monto.
+    for i in range(1, monto +1):
+        dp[i] = float('inf')
+        
+    for m in monedas:
+        for i in range (1, monto + 1)
+            dp[]#IUIUFDIFIUFIUO
+    
     # TODO: si dp[monto] es inf, retorna None.
     # TODO: reconstruye la lista de monedas usando padre[].
     pass
