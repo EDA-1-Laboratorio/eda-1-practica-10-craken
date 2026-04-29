@@ -139,7 +139,7 @@ if __name__ == "__main__":
     if encontrada:
         print(f"  Objetivo : '{objetivo}'")
         print(f"  Intentos : {intentos}")
-        print(f"  Tiempo   : {t:.4f} s")
+        print(f"  Tiempo   : {t:.6f} s")
         print(f"  Tasa     : {intentos / t:.0f} candidatos/s")
     else:
         print("  generar_candidatos aún no implementada (o target no encontrado)")
