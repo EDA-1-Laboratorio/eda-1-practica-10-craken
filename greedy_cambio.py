@@ -51,7 +51,7 @@ def cambio_greedy(monto: int, monedas: list) -> tuple | None:
         return (usedList, cantidadTotal)
     else:
         return None
-    
+        
     # TODO: 4. Si queda residuo, retorna None.
     pass
 
@@ -77,20 +77,42 @@ def cambio_optimo_dp(monto: int, monedas: list) -> tuple | None:
     """
     # TODO: crea la tabla dp y la tabla padre con longitud monto + 1.
     dp = []
-    padre = []
-    
+    padre = list(range(monto+1))
+    monedas.sort(reverse = True)
     # TODO: llena la tabla recorriendo cada monto parcial de 1 a monto.
-    for i in range(1, monto +1):
-        dp[i] = float('inf')
-        
+    for i in range(0, monto+1):
+        dp.append(float('inf'))
+    dp[0] = 0
+
     for m in monedas:
-        for i in range (1, monto + 1)
-            dp[]#IUIUFDIFIUFIUO
+        for i in range (0, monto+1):
+            if m > i:
+                continue
+            #print(i-m)
+            if dp[i] > dp[i-m] + 1:
+                padre[i] = m
+            dp[i] = min(dp[i], dp[i-m] + 1)
+            #padre[i] = m
+        
     
     # TODO: si dp[monto] es inf, retorna None.
-    # TODO: reconstruye la lista de monedas usando padre[].
-    pass
+    if dp[monto] == float('inf'):
+        return None
 
+    # TODO: reconstruye la lista de monedas usando padre[].
+    #print (monedas , padre)
+    monedas = []
+    
+    i = monto
+    while i > 0:
+        if (not padre[i] in monedas) and (padre[i] != 0):
+            monedas.append(padre[i])
+        i -= padre[i]
+
+        
+    return (monedas,dp[monto])
+
+    pass
 
 # ---------------------------------------------------------------------------
 # Problema C – Comparación: contraejemplos
@@ -107,7 +129,29 @@ def comparar_estrategias(monto_max: int, monedas: list) -> dict:
                                     donde greedy usa más monedas que DP.
     """
     # TODO: itera los montos, llama a cambio_greedy y cambio_optimo_dp.
+    montos_fallidos = []
+    montos_suboptimos = []
+
+    for monto in range(1, monto_max +1):
+        greedstatus = cambio_greedy(monto, monedas)
+        optimalstatus = cambio_optimo_dp(monto, monedas)
+
+        if optimalstatus == None:
+            continue
+
+        if greedstatus == None:
+            montos_fallidos.append(monto)
+            continue
+
+        if optimalstatus[1] < greedstatus[1]:
+            montos_suboptimos.append((monto, greedstatus[1], optimalstatus[1]))
+
     # TODO: clasifica cada caso y acumula en las listas correspondientes.
+
+    return {
+        'montos_greedy_falla': montos_fallidos,
+        'montos_greedy_suboptimo': montos_suboptimos
+    }
     pass
 
 
