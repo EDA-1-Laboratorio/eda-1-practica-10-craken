@@ -33,6 +33,8 @@ def generar_candidatos(alfabeto: str, longitud: int):
         "".join(tupla) convierte una tupla en cadena.
     """
     # TODO: implementa con itertools.product y yield o return del iterador
+    for tupla in itertools.product(alfabeto, repeat=longitud):
+        yield "".join(tupla)
     pass
 
 
@@ -51,8 +53,12 @@ def buscar_cadena_objetivo(objetivo: str, alfabeto: str,
     for longitud in range(min_len, len(objetivo) + 1):
         for candidato in generar_candidatos(alfabeto, longitud):
             # TODO: incrementa intentos
+            intentos+=1
             # TODO: si candidato == objetivo, calcula el tiempo y retorna
             #       (True, intentos, tiempo)
+            if candidato==objetivo:
+                tiempo=time.perf_counter()-inicio
+                return(True, intentos, tiempo)
             pass
 
     tiempo = time.perf_counter() - inicio
@@ -74,6 +80,8 @@ def combinar_teoricas(alfabeto: str, min_len: int, max_len: int) -> int:
         len(alfabeto) da |Σ|.
     """
     # TODO: implementa la fórmula
+    expr=len(alfabeto)
+    return sum(expr**k for k in range(min_len, max_len+1))
     pass
 
 
@@ -104,8 +112,19 @@ def buscar_con_poda(objetivo: str, alfabeto: str,
 
             # TODO: verifica los prefijos; si alguno no está en
             #       prefijos_validos, usa 'continue' para saltar.
+            candidato_valido=True
+            for k in range(1, len(candidato)):
+                if candidato[:k] not in prefijos_validos:
+                    candidato_valido=False
+                    break
+            if not candidato_valido:
+                continue
 
             # TODO: incrementa intentos y compara con objetivo.
+            intentos+=1
+            if candidato==objetivo:
+                tiempo=time.perf_counter()-inicio
+                return(True, intentos, tiempo)
             pass
 
     tiempo = time.perf_counter() - inicio
@@ -120,7 +139,7 @@ if __name__ == "__main__":
     if encontrada:
         print(f"  Objetivo : '{objetivo}'")
         print(f"  Intentos : {intentos}")
-        print(f"  Tiempo   : {t:.4f} s")
+        print(f"  Tiempo   : {t:.6f} s")
         print(f"  Tasa     : {intentos / t:.0f} candidatos/s")
     else:
         print("  generar_candidatos aún no implementada (o target no encontrado)")
